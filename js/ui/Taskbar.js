@@ -34,7 +34,7 @@ export class Taskbar {
         taskbarEl.innerHTML = `
             <div id="start-button-area">
                 <button id="start-button" aria-label="Menú de inicio">
-                    <img src="public/auraOs.svg" alt="AuraOS" class="start-button-icon">
+                    <img src="public/AmaiOS_HomeImage.svg" alt="AmaiOS_HomeImage" class="start-button-icon">
                 </button>
             </div>
             <div id="taskbar-apps"></div>
@@ -128,7 +128,7 @@ export class Taskbar {
             win.on('restore', (w) => this._updateIconState(w));
             win.on('titleChanged', (newTitle) => {
                 const span = iconEl.querySelector('span');
-                if (span) span.textContent = newTitle.substring(0,15) + (newTitle.length > 15 ? '…' : '');
+                if (span) span.textContent = newTitle.substring(0, 15) + (newTitle.length > 15 ? '…' : '');
             });
             win.on('iconChanged', (newIconClass) => {
                 const i = iconEl.querySelector('i');
@@ -151,7 +151,7 @@ export class Taskbar {
         iconEl.appendChild(i);
 
         const span = document.createElement('span');
-        span.textContent = win.title.substring(0,15) + (win.title.length > 15 ? '…' : '');
+        span.textContent = win.title.substring(0, 15) + (win.title.length > 15 ? '…' : '');
         iconEl.appendChild(span);
 
         iconEl.addEventListener('click', () => {
@@ -174,7 +174,7 @@ export class Taskbar {
         win.on('minimize', (w) => this._updateIconState(w));
         win.on('restore', (w) => this._updateIconState(w));
         win.on('titleChanged', (newTitle) => {
-            span.textContent = newTitle.substring(0,15) + (newTitle.length > 15 ? '…' : '');
+            span.textContent = newTitle.substring(0, 15) + (newTitle.length > 15 ? '…' : '');
         });
         win.on('iconChanged', (newIconClass) => {
             i.className = newIconClass;

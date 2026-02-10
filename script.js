@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let highestZIndex = 100;
     let windowIdCounter = 0;
 
-    const DEFAULT_WALLPAPER_URL = 'https://res.cloudinary.com/dvrqgxoqf/image/upload/v1747688882/default_background_kocr6r.png';
+    const DEFAULT_WALLPAPER_URL = 'https://res.cloudinary.com/dcxdexprb/image/upload/v1757618105/c2484582-8935-4b79-adaf-f841211e376d_bwligj.png';
 
     // --- Reloj y Calendario ---
     function updateClock() {
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (customClass) windowElement.classList.add(customClass);
 
         const windowIconElement = windowElement.querySelector('.window-icon i');
-        if(windowIconElement) windowIconElement.className = appIconClass; // Asignar icono específico de app
+        if (windowIconElement) windowIconElement.className = appIconClass; // Asignar icono específico de app
 
         const windowTitleElement = windowElement.querySelector('.window-title');
         const windowContentElement = windowElement.querySelector('.window-content');
@@ -318,8 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (remainingAppIds.length > 0) {
             const lastAppId = remainingAppIds[remainingAppIds.length - 1];
             if (openWindows[lastAppId] && !openWindows[lastAppId].isMinimized) {
-                 bringToFront(openWindows[lastAppId].element);
-                 setActiveTaskbarIcon(lastAppId);
+                bringToFront(openWindows[lastAppId].element);
+                setActiveTaskbarIcon(lastAppId);
             }
         }
     }
@@ -335,12 +335,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Si hay otra ventana no minimizada, activarla
         const otherAppIds = Object.keys(openWindows).filter(id => id !== appId && !openWindows[id].isMinimized);
         if (otherAppIds.length > 0) {
-            const nextAppId = otherAppIds.sort((a,b) =>
+            const nextAppId = otherAppIds.sort((a, b) =>
                 parseInt(openWindows[b].element.style.zIndex || 0) - parseInt(openWindows[a].element.style.zIndex || 0)
             )[0]; // La de z-index más alto
             if (nextAppId) {
-                 bringToFront(openWindows[nextAppId].element);
-                 setActiveTaskbarIcon(nextAppId);
+                bringToFront(openWindows[nextAppId].element);
+                setActiveTaskbarIcon(nextAppId);
             }
         }
     }
@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Si la ventana está visible pero no activa, activarla
                 // Si está activa, minimizarla (comportamiento común de dock/taskbar)
                 if (app.element.style.zIndex == highestZIndex && !app.element.classList.contains('minimized-state')) {
-                     minimizeWindow(appId, app.element);
+                    minimizeWindow(appId, app.element);
                 } else {
                     bringToFront(app.element);
                     setActiveTaskbarIcon(appId);
@@ -510,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let content = '';
         let customWindowClass = `${appId}-app`; // Para estilos específicos de app
 
-        switch(appId) {
+        switch (appId) {
             case 'calculator':
                 content = getCalculatorHTML();
                 break;
@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 content = getNotepadHTML();
                 break;
             case 'terminal':
-                content = `<div style="background: #000; color: #0F0; font-family: monospace; padding: 10px; height: 100%; overflow-y: auto;">AuraOS Terminal v0.1<br>> _</div>`;
+                content = `<div style="background: #000; color: #0F0; font-family: monospace; padding: 10px; height: 100%; overflow-y: auto;">AmaiOS Terminal v0.1<br>> _</div>`;
                 break;
             case 'settings':
                 content = getSettingsHTML();
@@ -588,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', () => {
                 const value = button.dataset.val;
 
-                if(value === 'noop') return; // Para botones sin función aún
+                if (value === 'noop') return; // Para botones sin función aún
 
                 if (value === 'C') {
                     currentInput = '0';
@@ -636,7 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentInput += value;
                     }
                     // Limitar longitud para que no desborde el display fácilmente
-                    display.textContent = currentInput.length > 12 ? currentInput.substring(0,12) + '...' : currentInput;
+                    display.textContent = currentInput.length > 12 ? currentInput.substring(0, 12) + '...' : currentInput;
                 }
             });
         });
@@ -664,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         function getOperatorSymbol(op) {
-            switch(op) {
+            switch (op) {
                 case '+': return '+';
                 case '-': return '−';
                 case '*': return '×';
@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="settings-category">
                     <h3><i class="fas fa-info-circle"></i> Acerca de</h3>
-                    <p><strong>AuraOS - Web Desktop Sim</strong></p>
+                    <p><strong>AmaiOS - Web Desktop Sim</strong></p>
                     <p>Versión 0.2 Alpha</p>
                     <p>Un proyecto para demostrar capacidades de desarrollo Front-End.</p>
                 </div>
@@ -831,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicializar ajustes (ej. cambiar fondo) - se haría dentro de createWindow si appId es 'settings'
     // pero para simplificar, si la ventana de ajustes se abre, adjuntamos el listener
-    document.body.addEventListener('click', function(event) {
+    document.body.addEventListener('click', function (event) {
         if (event.target.id === 'apply-wallpaper-button') {
             const wallpaperUrlInput = document.getElementById('wallpaper-url-input');
             const wallpaperPreviewImg = document.getElementById('wallpaper-preview-img'); // Puede haber múltiples si se abren varias ventanas de settings, idealmente se buscaría dentro de la ventana activa.
@@ -843,7 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 desktop.style.backgroundImage = `url('${wallpaperUrl}')`;
                 localStorage.setItem('desktopWallpaper', wallpaperUrl);
                 if (wallpaperPreviewImg) wallpaperPreviewImg.src = wallpaperUrl;
-            } else if(wallpaperUrl === "") { // Restablecer al fondo por defecto
+            } else if (wallpaperUrl === "") { // Restablecer al fondo por defecto
                 desktop.style.backgroundImage = `url('${DEFAULT_WALLPAPER_URL}')`;
                 localStorage.setItem('desktopWallpaper', DEFAULT_WALLPAPER_URL);
                 if (wallpaperPreviewImg) wallpaperPreviewImg.src = DEFAULT_WALLPAPER_URL;

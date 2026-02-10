@@ -1,45 +1,47 @@
 // js/main.js
-import { UserSession } from './core/UserSession.js';
-import { FileSystem } from './core/FileSystem.js';
-import { WindowManager } from './core/WindowManager.js';
 import { ContextMenu } from './core/ContextMenu.js';
+import { FileSystem } from './core/FileSystem.js';
+import { UserSession } from './core/UserSession.js';
 import { Window as AuraWindow } from './core/Window.js'; // Renombrar para evitar conflicto con window global
+import { WindowManager } from './core/WindowManager.js';
+import { WindowTilingManager } from './ui/WindowTilingManager.js';
 
 import { AuthScreen } from './ui/AuthScreen.js';
 import { Desktop } from './ui/Desktop.js';
-import { Taskbar } from './ui/Taskbar.js';
 import { StartMenu } from './ui/StartMenu.js';
+import { Taskbar } from './ui/Taskbar.js';
 
 // Importar Aplicaciones
-import { CalculatorApp } from './apps/CalculatorApp.js';
-import { NotepadApp } from './apps/NotepadApp.js'; // Asegúrate de crear este archivo
-import { FileExplorerApp } from './apps/FileExplorerApp.js'; // Asegúrate de crear este archivo
 import { BrowserApp } from './apps/BrowserApp.js'; // Asegúrate de crear este archivo
-import { SettingsApp } from './apps/SettingsApp.js'; // Asegúrate de crear este archivo
-import { MinesweeperApp } from './apps/MinesweeperApp.js';
+import { CalculatorApp } from './apps/CalculatorApp.js';
 import { ChessApp } from './apps/ChessApp.js';
-import { TerminalApp } from './apps/TerminalApp.js'; // Importar Terminal
 import { CodeEditorApp } from './apps/CodeEditorApp.js'; // Importar Editor de Código
 import { DrawingApp } from './apps/DrawingApp.js'; // Importar Aplicación de Dibujo
+import { FileExplorerApp } from './apps/FileExplorerApp.js'; // Asegúrate de crear este archivo
+import { MinesweeperApp } from './apps/MinesweeperApp.js';
+import { NotepadApp } from './apps/NotepadApp.js'; // Asegúrate de crear este archivo
+import { SettingsApp } from './apps/SettingsApp.js'; // Asegúrate de crear este archivo
+import { TerminalApp } from './apps/TerminalApp.js'; // Importar Terminal
 
 // Hacer Window accesible globalmente para que WindowManager pueda instanciarla
 // Esta es una solución temporal para la estructura actual. En un sistema más complejo
 // se podría usar inyección de dependencias o un service locator.
-window.AuraOS_Window = AuraWindow;
+window.AmaiOS_Window = AuraWindow;
 
 
 class WebOS {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
         if (!this.container) {
-            console.error(`AuraOS Error: Container element with ID '${containerId}' not found.`);
-            alert("Error crítico: No se pudo inicializar AuraOS. Contenedor no encontrado.");
+            console.error(`AmaiOS Error: Container element with ID '${containerId}' not found.`);
+            alert("Error crítico: No se pudo inicializar AmaiOS. Contenedor no encontrado.");
             return;
         }
 
         this.userSession = new UserSession();
         this.fs = null;
         this.windowManager = new WindowManager(this);
+        this.windowTilingManager = new WindowTilingManager(this.windowManager);
         this.contextMenu = new ContextMenu(this);
 
         this.desktop = null;
@@ -64,7 +66,7 @@ class WebOS {
     }
 
     _onLogin(user) {
-        console.log(`AuraOS: User '${user.username}' logged in.`);
+        console.log(`AmaiOS: User '${user.username}' logged in.`);
         this.authScreen.hide();
         this.container.innerHTML = ''; // Limpiar completamente por si acaso
 
@@ -85,14 +87,14 @@ class WebOS {
     }
 
     _onLogout(oldUser) {
-        console.log(`AuraOS: User '${oldUser?.username || 'Unknown'}' logged out.`);
+        console.log(`AmaiOS: User '${oldUser?.username || 'Unknown'}' logged out.`);
         // Cerrar todas las ventanas
         Object.keys(this.windowManager.openWindows).forEach(winId => {
             const win = this.windowManager.getWindow(winId);
             // win.close() podría tener lógica asíncrona o de confirmación,
             // para un logout forzado, podríamos querer una forma más directa.
             // Por ahora, confiamos en el close normal.
-            if(win) win.close();
+            if (win) win.close();
         });
 
         // Limpiar componentes de UI
@@ -125,7 +127,7 @@ class WebOS {
             'codeeditor': new CodeEditorApp(this), // Registrar Editor de Código
             'drawing': new DrawingApp(this) // Registrar Aplicación de Dibujo
         };
-        console.log("AuraOS: Apps registered:", Object.keys(this.apps));
+        console.log("AmaiOS: Apps registered:", Object.keys(this.apps));
     }
 
     _populateDesktop() {
@@ -145,10 +147,10 @@ class WebOS {
     launchApp(appId, launchOptions = {}) {
         const app = this.apps[appId];
         if (app) {
-            console.log(`AuraOS: Launching app '${appId}' with options:`, launchOptions);
+            console.log(`AmaiOS: Launching app '${appId}' with options:`, launchOptions);
             return app.launch(launchOptions);
         } else {
-            console.error(`AuraOS Error: Application '${appId}' not found.`);
+            console.error(`AmaiOS Error: Application '${appId}' not found.`);
             alert(`Error: Aplicación "${appId}" no encontrada.`);
             return null;
         }
@@ -158,15 +160,15 @@ class WebOS {
 // ---------- Inicialización Global ----------
 document.addEventListener('DOMContentLoaded', () => {
     // Deshabilitar menú contextual nativo en todo el body, excepto en inputs/textareas
-    document.body.addEventListener('contextmenu', function(e) {
+    document.body.addEventListener('contextmenu', function (e) {
         if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.isContentEditable) {
             e.preventDefault();
         }
     });
 
     // Adjuntar la instancia principal de WebOS al objeto window para depuración y acceso global si es necesario
-    window.AuraOS = new WebOS('aura-os-container');
-    console.log("AuraOS Initialized.");
+    window.AmaiOS = new WebOS('amai-os-container');
+    console.log("AmaiOS Initialized.");
 
     // Reemplazar el código de registro del Service Worker con este bloque más seguro
     // que evita intentar registrar el service worker completamente

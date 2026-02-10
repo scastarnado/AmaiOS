@@ -97,7 +97,7 @@ export class Desktop {
 
             // Si nos salimos de las filas calculadas y hemos probado muchas veces, ir a fallback
             if (row > maxRowsEffective && attempts > maxRowsEffective * maxColsEffective) {
-                 break;
+                break;
             }
             attempts++;
         }
@@ -116,7 +116,7 @@ export class Desktop {
         // Permitir un número generoso de intentos adicionales
         const maxFallbackAttempts = (maxColsEffective + 10) * (maxRowsEffective + 10);
 
-        while(fallbackAttempts < maxFallbackAttempts) {
+        while (fallbackAttempts < maxFallbackAttempts) {
             if (!occupiedSlots.has(`${col}-${row}`)) {
                 return { col, row };
             }
@@ -127,7 +127,7 @@ export class Desktop {
                 row++;
             }
             fallbackAttempts++;
-             // Si nos pasamos de un número razonable de filas en fallback
+            // Si nos pasamos de un número razonable de filas en fallback
             if (row > maxRowsEffective + 10) break;
         }
 
@@ -207,7 +207,7 @@ export class Desktop {
                 e.dataTransfer.effectAllowed = 'move';
                 // Pequeño timeout para que el navegador capture el "fantasma" antes de aplicar la clase
                 setTimeout(() => {
-                    if(this.draggedIcon) this.draggedIcon.classList.add('dragging');
+                    if (this.draggedIcon) this.draggedIcon.classList.add('dragging');
                 }, 0);
             }
         });
@@ -276,7 +276,7 @@ export class Desktop {
 
 
     loadWallpaper() {
-        const defaultWallpaper = 'https://res.cloudinary.com/dvrqgxoqf/image/upload/v1747688882/default_background_kocr6r.png';
+        const defaultWallpaper = 'https://res.cloudinary.com/dcxdexprb/image/upload/v1757618105/c2484582-8935-4b79-adaf-f841211e376d_bwligj.png';
         const savedWallpaper = this._hasActiveUser() ? this.webOS.userSession.getUserSetting('wallpaper') : null;
         // console.log('Loading wallpaper:', savedWallpaper || '(none saved, using default)');
 
@@ -291,7 +291,7 @@ export class Desktop {
     }
 
     setWallpaper(url) {
-        const defaultWallpaper = 'https://res.cloudinary.com/dvrqgxoqf/image/upload/v1747688882/default_background_kocr6r.png';
+        const defaultWallpaper = 'https://res.cloudinary.com/dcxdexprb/image/upload/v1757618105/c2484582-8935-4b79-adaf-f841211e376d_bwligj.png';
         if (url && (url.startsWith('http') || url.startsWith('data:image'))) {
             this.element.style.backgroundImage = `url('${url}')`;
             if (this._hasActiveUser()) {
@@ -313,8 +313,8 @@ export class Desktop {
 
     _hasActiveUser() {
         return this.webOS &&
-               this.webOS.userSession &&
-               this.webOS.userSession.currentUser;
+            this.webOS.userSession &&
+            this.webOS.userSession.currentUser;
     }
 
     _setupEventListeners() {
@@ -329,39 +329,42 @@ export class Desktop {
 
             const items = [
                 { label: 'Cambiar Fondo (Ajustes)', icon: 'fa-palette', action: () => this.webOS.launchApp('settings') },
-                { label: 'Actualizar Escritorio', icon: 'fa-sync-alt', action: () => {
-                    // Guardar posiciones actuales antes de recargar, por si acaso
-                    this.saveIconPositions();
-                    this.element.querySelectorAll('.desktop-icon').forEach(icon => icon.remove());
-                    // Volver a cargar posiciones (por si algo cambió externamente, aunque no debería ser común)
-                    this.loadIconPositions();
-                    this.webOS._populateDesktop(); // Asumiendo que este método existe y llama a addIcon
-                 } },
-                 { separator: true},
-                 { label: 'Acerca de AuraOS', icon: 'fa-info-circle', action: () => {
-                    const windowId = 'about-auraos-desktop';
-                    const existingWindow = this.webOS.windowManager.getWindowById(windowId);
-                    if (existingWindow) {
-                        existingWindow.focus();
-                        return;
+                {
+                    label: 'Actualizar Escritorio', icon: 'fa-sync-alt', action: () => {
+                        // Guardar posiciones actuales antes de recargar, por si acaso
+                        this.saveIconPositions();
+                        this.element.querySelectorAll('.desktop-icon').forEach(icon => icon.remove());
+                        // Volver a cargar posiciones (por si algo cambió externamente, aunque no debería ser común)
+                        this.loadIconPositions();
+                        this.webOS._populateDesktop(); // Asumiendo que este método existe y llama a addIcon
                     }
-                    const aboutWindow = this.webOS.windowManager.createWindow(
-                        windowId,
-                        'Acerca de AuraOS',
-                        'fas fa-info-circle',
-                        { width: 420, height: 320, minWidth: 350, minHeight: 280, customClass: 'about-window-theme' }
-                    );
-                    const aboutContentHTML = `
+                },
+                { separator: true },
+                {
+                    label: 'Acerca de AmaiOS', icon: 'fa-info-circle', action: () => {
+                        const windowId = 'about-AmaiOS-desktop';
+                        const existingWindow = this.webOS.windowManager.getWindowById(windowId);
+                        if (existingWindow) {
+                            existingWindow.focus();
+                            return;
+                        }
+                        const aboutWindow = this.webOS.windowManager.createWindow(
+                            windowId,
+                            'Acerca de AmaiOS',
+                            'fas fa-info-circle',
+                            { width: 420, height: 320, minWidth: 350, minHeight: 280, customClass: 'about-window-theme' }
+                        );
+                        const aboutContentHTML = `
                         <div style="padding: 20px; line-height: 1.6; color: var(--text-color); font-family: var(--font-family);">
                             <h3 style="margin-bottom: 15px; color: var(--accent-color); text-align: center; font-size: 1.6em; font-weight: 500;">
-                                <i class="fab fa-linux" style="margin-right: 8px;"></i>AuraOS
+                                <i class="fab fa-linux" style="margin-right: 8px;"></i>AmaiOS
                             </h3>
                             <p style="text-align: center; font-size: 0.95em; margin-bottom: 10px;">Versión 0.5 (Portfolio Edition)</p>
                             <p style="text-align: center; margin-bottom: 15px;">
-                                Desarrollado por: <strong style="color: var(--accent-color-hover);">JuansesDev</strong>
+                                Desarrollado por: <strong style="color: var(--accent-color-hover);">scastarnado</strong>
                             </p>
                             <p style="font-size: 0.9em; margin-bottom:8px;">
-                                AuraOS es un simulador de sistema operativo web interactivo,
+                                AmaiOS es un simulador de sistema operativo web interactivo,
                                 diseñado para demostrar habilidades en desarrollo front-end
                                 utilizando HTML, CSS y JavaScript modular.
                             </p>
@@ -370,16 +373,17 @@ export class Desktop {
                                 <a href="https://pixeldreamsgallery.me/" target="_blank" rel="noopener noreferrer" style="color:var(--accent-color);text-decoration:none;">Pixel Dreams Gallery</a> y otras fuentes.
                             </p>
                             <p style="text-align:center;margin-top:25px;font-size:0.85em;color:var(--text-color-darker);">
-                                © ${new Date().getFullYear()} JuansesDev.
+                                © ${new Date().getFullYear()} scastarnado.
                             </p>
                         </div>
                     `.trim();
-                    if (aboutWindow) {
-                        aboutWindow.setContent(aboutContentHTML);
-                    } else {
-                        console.error("No se pudo crear la ventana 'Acerca de AuraOS'");
+                        if (aboutWindow) {
+                            aboutWindow.setContent(aboutContentHTML);
+                        } else {
+                            console.error("No se pudo crear la ventana 'Acerca de AmaiOS'");
+                        }
                     }
-                 } }
+                }
             ];
             this.webOS.contextMenu.show(e.clientX, e.clientY, items);
         });

@@ -23,6 +23,8 @@ export class Window extends EventEmittable {
         this.isMaximized = false;
         this.originalState = {}; // Guarda el estado para restaurar después de maximizar
 
+        this._tileHintVisible = false;
+
         // Configuración inicial de tamaño y posición
         this.element.style.width = `${this.options.width}px`;
         this.element.style.height = `${this.options.height}px`;
@@ -176,6 +178,23 @@ export class Window extends EventEmittable {
             newHeight = minHeight;
         }
 
+        // Comprobar límites del monitor
+        const desktopRect = this.wm.webOS.desktop.element.getBoundingClientRect();
+        if (newLeft + newWidth > desktopRect.right) {
+            newWidth = desktopRect.right - newLeft;
+        }
+        if (newTop + newHeight > desktopRect.bottom) {
+            newHeight = desktopRect.bottom - newTop;
+        }
+        if (newLeft < desktopRect.left) {
+            newWidth -= (desktopRect.left - newLeft);
+            newLeft = desktopRect.left;
+        }
+        if (newTop < desktopRect.top) {
+            newHeight -= (desktopRect.top - newTop);
+            newTop = desktopRect.top;
+        }
+
         // Aplicar cambios
         this.element.style.width = `${newWidth}px`;
         this.element.style.height = `${newHeight}px`;
@@ -215,6 +234,8 @@ export class Window extends EventEmittable {
         document.addEventListener('mousemove', this._onDragMoveRef);
         document.addEventListener('mouseup', this._onDragEndRef, { once: true });
 
+        this.wm.webOS.windowTilingManager.setDraggedWindow(this);
+
         this.bringToFront();
     }
 
@@ -228,22 +249,40 @@ export class Window extends EventEmittable {
         const desktopRect = this.wm.webOS.desktop.element.getBoundingClientRect();
         const headerHeight = this.headerElement.offsetHeight;
 
-        // Mantener la ventana dentro de los límites del escritorio
         newX = Math.max(0, Math.min(newX, desktopRect.width - this.element.offsetWidth));
-        newY = Math.max(0, Math.min(newY, desktopRect.height - headerHeight - 5)); // Permitir que el encabezado esté ligeramente fuera de la parte superior
+        newY = Math.max(0, Math.min(newY, desktopRect.height - headerHeight - 5));
 
         this.element.style.left = `${newX}px`;
         this.element.style.top = `${newY}px`;
+
+        const SHOW_Y = 10;   // mostrar cuando llega arriba
+        const HIDE_Y = screen.height * 0.15;   // ocultar cuando baja
+
+        if (!this._tileHintVisible && newY <= SHOW_Y) {
+            this.wm.webOS.windowTilingManager.suggestTiling();
+            this._tileHintVisible = true;
+        } else if (this._tileHintVisible && newY > HIDE_Y) {
+            this.wm.webOS.windowTilingManager.removeSuggestedTiling();
+            this._tileHintVisible = false;
+        }
     }
 
     // Maneja el fin del arrastre
     _onDragEnd() {
         if (!this.isDragging) return;
         this.isDragging = false;
+
+        // Asegura que no quede el hint visible si sueltas el mouse
+        if (this._tileHintVisible) {
+            this.wm.webOS.windowTilingManager.removeSuggestedTiling();
+            this._tileHintVisible = false;
+        }
+
         document.body.style.cursor = 'default';
         this.headerElement.style.cursor = 'move';
         document.removeEventListener('mousemove', this._onDragMoveRef);
-        // El listener de mouseup ya se eliminó debido a { once: true }
+
+        this.wm.webOS.windowTilingManager.unsetDraggedWindow();
     }
 
     // Establece el contenido de la ventana

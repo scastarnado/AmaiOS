@@ -4,34 +4,34 @@ AmaiOS es una simulación interactiva de un sistema operativo de escritorio que 
 
 ## Características Destacadas
 
-*   **Entorno de Escritorio:** Con ventanas arrastrables, minimizables, maximizables y cerrables.
-*   **Barra de Tareas y Menú de Inicio:** Funcionales para lanzar aplicaciones y gestionar ventanas.
-*   **Sistema de Archivos Simulado:** Persistente por usuario usando `localStorage`.
-*   **Autenticación de Usuario:** "Login" y "registro" básicos.
-*   **Aplicaciones Incluidas:**
-    *   Explorador de Archivos
-    *   Bloc de Notas (guardar/abrir archivos `.txt`)
-    *   Editor de Código (guardar/abrir archivos, ejecutar HTML básico)
-    *   Terminal (comandos básicos del sistema de archivos)
-    *   Calculadora
-    *   Navegador Web (básico, con **limitaciones debido a las políticas X-Frame-Options** de muchos sitios web que impiden su incrustación en iframes).
-    *   Ajustes (personalización de fondo, info del sistema)
-    *   Juegos: Buscaminas y Ajedrez (1P vs IA simple / 2P local)
-    *   Clon de MSPaint
-*   **Arquitectura Modular:** Código organizado en clases y módulos ES6.
+- **Entorno de Escritorio:** Con ventanas arrastrables, minimizables, maximizables y cerrables.
+- **Barra de Tareas y Menú de Inicio:** Funcionales para lanzar aplicaciones y gestionar ventanas.
+- **Sistema de Archivos Simulado:** Persistente por usuario usando `localStorage`.
+- **Autenticación de Usuario:** "Login" y "registro" básicos.
+- **Aplicaciones Incluidas:**
+  - Explorador de Archivos
+  - Bloc de Notas (guardar/abrir archivos `.txt`)
+  - Editor de Código (guardar/abrir archivos, ejecutar HTML básico)
+  - Terminal (comandos básicos del sistema de archivos)
+  - Calculadora
+  - Navegador Web (básico, con **limitaciones debido a las políticas X-Frame-Options** de muchos sitios web que impiden su incrustación en iframes).
+  - Ajustes (personalización de fondo, info del sistema)
+  - Juegos: Buscaminas y Ajedrez (1P vs IA simple / 2P local)
+  - Clon de MSPaint
+- **Arquitectura Modular:** Código organizado en clases y módulos ES6.
 
 ## Tecnologías
 
-*   HTML5, CSS3 (Variables, Flexbox, Grid)
-*   JavaScript (ES6+ Clases y Módulos)
-*   Font Awesome (Iconos)
-*   `localStorage` (Persistencia)
+- HTML5, CSS3 (Variables, Flexbox, Grid)
+- JavaScript (ES6+ Clases y Módulos)
+- Font Awesome (Iconos)
+- `localStorage` (Persistencia)
 
 ## Ejecución
 
 1.  Descarga o clona el proyecto.
 2.  **Sirve los archivos a través de un servidor web local.** (Ej: Extensión "Live Server" de VSCode, o `npx http-server` en la carpeta del proyecto).
-    *   *Abrir `index.html` directamente desde el sistema de archivos (`file:///`) no funcionará debido a los módulos ES6.*
+    - _Abrir `index.html` directamente desde el sistema de archivos (`file:///`) no funcionará debido a los módulos ES6._
 3.  Abre la URL de tu servidor local (ej. `http://localhost:8080`) en un navegador moderno.
 
 ## Demo en línea
@@ -42,7 +42,7 @@ Puedes probar la demo desde el siguiente enlace:
 
 ## Inspiración
 
-*   **JuansesDev**
-    *   GitHub: [@JuansesDev](https://github.com/JuansesDev)
+- **scastarnado**
+  - GitHub: [@scastarnado](https://github.com/scastarnado)
 
-*(Este proyecto está en desarrollo activo. ¡Comentarios y sugerencias son bienvenidos!)*
+_(Este proyecto está en desarrollo activo. ¡Comentarios y sugerencias son bienvenidos!)_
